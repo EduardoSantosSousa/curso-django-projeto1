@@ -5,9 +5,13 @@
 {%block content %}
     <main class="main-content-container">
         <div class="main-content main-content-list container"> 
-          {% for recipe in recipes%}
+          {% for recipe in recipes %}
             {% include "recipes/partials/recipe.html" %}
-         {% endfor %}   
+          {% empty %}
+            <div class = "center m-y">
+              <h1>No recipe found here 😢</h1>
+            </div>   
+          {% endfor %}    
         </div>
     </main>
 {% endblock content %}
