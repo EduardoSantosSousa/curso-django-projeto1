@@ -19,3 +19,11 @@ def recipe(request, id):
     recipe = get_object_or_404(Recipe, pk=id, is_published=True, )
     #recipe = Recipe.objects.filter(pk=id, is_published=True).order_by('-id').first() # Forma manual
     return render(request, 'recipes/pages/recipe-view.html', context={'recipe':recipe, 'is_detail_page':True})
+
+def search(request):
+    search_term = request.GET.get('q')
+
+    if not search_term:
+        raise Http404()
+
+    return render(request, 'recipes/pages/search.html')
