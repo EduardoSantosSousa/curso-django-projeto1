@@ -2,6 +2,8 @@ from django.shortcuts import render, get_list_or_404, get_object_or_404
 from utils.recipes.factory import make_recipe
 from recipes.models import Recipe
 from django.http import Http404
+from django.db.models import Q
+import unicodedata
 
 # Create your views here.
 
@@ -20,10 +22,45 @@ def recipe(request, id):
     #recipe = Recipe.objects.filter(pk=id, is_published=True).order_by('-id').first() # Forma manual
     return render(request, 'recipes/pages/recipe-view.html', context={'recipe':recipe, 'is_detail_page':True})
 
-def search(request):
-    search_term = request.GET.get('q')
+#def search(request):
+#    search_term = request.GET.get('q', '').strip()
 
+#    if not search_term:
+#        raise Http404()
+    
+#    recipes = Recipe.objects.filter(
+#        Q(
+#            Q(title__icontains=search_term) |
+#            Q(description__icontains=search_term)),
+#        is_published=True
+#    ).order_by('-id')
+
+#    return render(request, 'recipes/pages/search.html', {
+#        'page_title': f'Search for "{search_term}" |',
+#       'search_term': search_term,
+#        'recipes': recipes,
+#    })
+
+def normalize(text):
+    return ''.join(
+        c for c in unicodedata.normalize('NFKD', text)
+        if not unicodedata.combining(c)
+    ).lower()
+
+def search(request):
+    search_term = request.GET.get('q', '').strip()
     if not search_term:
         raise Http404()
 
-    return render(request, 'recipes/pages/search.html')
+    normalized_term = normalize(search_term)
+
+    recipes = [
+        r for r in Recipe.objects.filter(is_published=True)
+        if normalized_term in normalize(r.title) or normalized_term in normalize(r.description)
+    ]
+
+    return render(request, 'recipes/pages/search.html', {
+        'page_title': f'Search for "{search_term}" |',
+        'search_term': search_term,
+        'recipes': recipes,
+    })
