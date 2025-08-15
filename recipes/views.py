@@ -4,8 +4,10 @@ from recipes.models import Recipe
 from django.http import Http404
 from django.db.models import Q
 import unicodedata
-from django.core.paginator import Paginator
-from utils.pagination import make_pagination_range
+from utils.pagination import make_pagination
+import os
+
+PER_PAGE = os.environ.get('PER_PAGE', 6)
 
 
 
@@ -13,21 +15,9 @@ from utils.pagination import make_pagination_range
 
 def home(request):
     recipes = Recipe.objects.filter(is_published=True).order_by('-id')
+
+    page_obj, pagination_range = make_pagination(request, recipes, PER_PAGE)
     
-    try:
-        current_page = int(request.GET.get('page', 1))
-    except ValueError:
-        current_page = 1
-
-    paginator = Paginator(recipes, 9)
-    page_obj = paginator.get_page(current_page)
-
-    pagination_range = make_pagination_range(
-        paginator.page_range, 
-        4,
-        current_page 
-    )
-
     return render(request, 'recipes/pages/home.html', context={
         'recipes':page_obj,
         'pagination_range':pagination_range
@@ -35,7 +25,11 @@ def home(request):
 
 def category(request, category_id):
     recipes = get_list_or_404(Recipe.objects.filter(category__id=category_id, is_published=True).order_by('-id'))
-    return render(request, 'recipes/pages/category.html', context={'recipes':recipes, 'title': f'{recipes[0].category} - Category | Recipes'})
+
+    page_obj, pagination_range = make_pagination(request, recipes, PER_PAGE)
+
+    return render(request, 'recipes/pages/category.html', context={'recipes':page_obj,'pagination_range': pagination_range,
+                                                                    'title': f'{recipes[0].category} - Category | Recipes'})
 
 
 def recipe(request, id):
@@ -75,13 +69,19 @@ def search(request):
 
     normalized_term = normalize(search_term)
 
+    recipes_qs = Recipe.objects.filter(is_published=True)
     recipes = [
-        r for r in Recipe.objects.filter(is_published=True)
+        r for r in recipes_qs
         if normalized_term in normalize(r.title) or normalized_term in normalize(r.description)
     ]
+
+    page_obj, pagination_range = make_pagination(request, recipes, PER_PAGE)
 
     return render(request, 'recipes/pages/search.html', {
         'page_title': f'Search for "{search_term}" |',
         'search_term': search_term,
-        'recipes': recipes,
+        'recipes': page_obj,  
+        'pagination_range': pagination_range,
+        'addition_url_query':f'&q={search_term}'
     })
+
