@@ -7,8 +7,7 @@ import unicodedata
 from utils.pagination import make_pagination
 import os
 
-PER_PAGE = os.environ.get('PER_PAGE', 6)
-
+PER_PAGE = int(os.environ.get('PER_PAGE', 6))
 
 
 # Create your views here.
@@ -17,7 +16,7 @@ def home(request):
     recipes = Recipe.objects.filter(is_published=True).order_by('-id')
 
     page_obj, pagination_range = make_pagination(request, recipes, PER_PAGE)
-    
+
     return render(request, 'recipes/pages/home.html', context={
         'recipes':page_obj,
         'pagination_range':pagination_range
@@ -63,6 +62,9 @@ def normalize(text):
     ).lower()
 
 def search(request):
+    
+    messages.success(request, 'Epa, você foi pesquisar algo que eu vi.')
+    
     search_term = request.GET.get('q', '').strip()
     if not search_term:
         raise Http404()
