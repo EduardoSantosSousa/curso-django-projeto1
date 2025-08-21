@@ -12,3 +12,18 @@ class RegisterForm(forms.ModelForm):
             'email',
             'password',
         ]
+
+        #exclude = ['first_name']
+
+        labels ={
+            'username':'Username',
+            'first_name':'First Name',
+            'last_name':'Last Name',
+            'email': 'E-mail',
+            'password':'Password'
+
+        }
+
+        help_texts = {
+            'email': 'The e-mail must be valid'
+        }
