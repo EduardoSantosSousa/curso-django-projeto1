@@ -1,5 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
+import re
 
 def add_attr(field, attr_name, attr_new_val):
     existing_attr = field.widget.attrs.get(attr_name, '')
@@ -8,6 +10,18 @@ def add_attr(field, attr_name, attr_new_val):
 def add_placeholder(field, placeholder_val):
     add_attr(field, 'placeholder', placeholder_val)
 
+
+def strong_password(password):
+    regex = re.compile(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}$')
+
+    if not regex.match(password):
+        raise(ValidationError(('Password must have at least one uppercase letter, '
+            'one lower case letter and one number. The length should be'
+            'at least 8 character.'),
+            code = 'Invalid',
+            ))
+
+
 class RegisterForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -15,22 +29,27 @@ class RegisterForm(forms.ModelForm):
         add_placeholder(self.fields['email'], 'Your e-mail')
         add_placeholder(self.fields['first_name'], 'Your First Name')
         add_placeholder(self.fields['last_name'], 'Your Last Name')
+        add_placeholder(self.fields['password'], 'Type your password')
+        add_placeholder(self.fields['password2'], 'Repeat your password')
 
 
     password = forms.CharField(
         required=True,
-        widget=forms.PasswordInput(attrs={'placeholder':'Your password'}),
+        widget=forms.PasswordInput(),
         error_messages={'required':'Password must not be empty'},
         help_text = (
             'Password must have at least one uppercase letter, '
             'one lower case letter and one number. The length should be'
             'at least 8 character.' 
-        )
+        ),
+        validators=[strong_password],
+        label = 'Password'
     )
 
     password2 = forms.CharField(
         required=True,
-        widget=forms.PasswordInput(attrs={'placeholder':'Repeat your password'})
+        widget=forms.PasswordInput(),
+        label = 'Password2'
     )
 
     class Meta:
@@ -50,7 +69,6 @@ class RegisterForm(forms.ModelForm):
             'first_name':'First Name',
             'last_name':'Last Name',
             'email': 'E-mail',
-            'password':'Password'
 
         }
 
@@ -64,7 +82,14 @@ class RegisterForm(forms.ModelForm):
            
         }
 
-        widgets = {
-            'first_name':forms.TextInput(attrs={'placeholder':'Type your username here'}),
-            'password':forms.PasswordInput(attrs={'placeholder':'Type your password here'})
-        }
+    def clean(self):
+        cleaned_data = super().clean()
+
+        password = cleaned_data.get('password')
+        password2 = cleaned_data.get('password2')
+
+        if password != password2:
+            raise ValidationError({'password':'Password and password2 must be equal',
+                                   'password2':'Password and password2 must be equal'}
+                
+            )
