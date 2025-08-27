@@ -33,6 +33,31 @@ class RegisterForm(forms.ModelForm):
         add_placeholder(self.fields['password2'], 'Repeat your password')
 
 
+    username = forms.CharField(
+        label = 'Username',
+        error_messages={'required': 'This field must not be empty',
+                        'min_length':'Username must have at least 4 characters',
+                        'max_length':'Username must have less than 150 characters'},
+        help_text= ('Username must have latters, numbers or one of those @.+-_'
+                    'The length should be between 4 and 150 characters.'
+                    ),
+        min_length = 4, max_length = 150,             
+    )
+
+
+    first_name = forms.CharField(
+        error_messages={'required':'Write your first name'},
+        required = True,
+        label = 'First Name'
+    )
+
+    last_name = forms.CharField(
+        error_messages={'required':'Write your last name'},
+        required = True,
+        label = 'Last Name'
+    )
+
+
     password = forms.CharField(
         required=True,
         widget=forms.PasswordInput(),
@@ -49,8 +74,19 @@ class RegisterForm(forms.ModelForm):
     password2 = forms.CharField(
         required=True,
         widget=forms.PasswordInput(),
-        label = 'Password2'
+        label = 'Password2',
+        error_messages={'required':'Please, repeat your password'},
     )
+
+    email = forms.EmailField(
+        error_messages={'required':'E-mail is required'},
+        label = 'E-mail',
+        help_text = 'The e-mail must be valid'
+            
+        
+    )
+
+    
 
     class Meta:
         model = User
@@ -62,25 +98,6 @@ class RegisterForm(forms.ModelForm):
             'password',
         ]
 
-        #exclude = ['first_name']
-
-        labels ={
-            'username':'Username',
-            'first_name':'First Name',
-            'last_name':'Last Name',
-            'email': 'E-mail',
-
-        }
-
-        help_texts = {
-            'email': 'The e-mail must be valid'
-        }
-
-        error_messages = {
-            'username':{'required':'This field must not be empty',
-                        }
-           
-        }
 
     def clean(self):
         cleaned_data = super().clean()
