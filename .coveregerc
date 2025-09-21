@@ -4,4 +4,5 @@ omit =
     venv/*,
     **/*test*.py,
     manage.py,
-    __localcode/main.py
+    __localcode/main.py,
+    browser.py
