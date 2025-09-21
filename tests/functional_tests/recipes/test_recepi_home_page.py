@@ -33,6 +33,8 @@ class RecipeHomePageFunctionalTest(RecipeBaseFunctionalTest):
         search_input.send_keys(title_needed)
         search_input.send_keys(Keys.ENTER)
 
+        self.sleep(6)
+
         # O usuario vê  o que estava procurando na pagina:
         self.assertIn(title_needed, self.browser.find_element(By.CLASS_NAME, 'main-content-list').text,)
 
