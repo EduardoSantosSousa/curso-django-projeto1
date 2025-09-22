@@ -80,8 +80,9 @@ class AuthorsLoginTest(AuthorsBaseTest):
         # Envia o formulario
         form.submit()
 
+        self.sleep(6)
         # Vê uma mensagem de erro na tela:
-        self.assertIn('Invalid credentials', self.browser.find_element(By.TAG_NAME, 'body').text) 
+        self.assertIn('Invalid Credentials', self.browser.find_element(By.TAG_NAME, 'body').text) 
 
     
      
