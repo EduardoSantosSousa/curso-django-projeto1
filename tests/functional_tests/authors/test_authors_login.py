@@ -30,8 +30,7 @@ class AuthorsLoginTest(AuthorsBaseTest):
         self.sleep(6)
 
         # Usuário vê a mensagem de login com sucesso e seu nome:
-        self.assertIn(f'Your are logged in with {user.username} Please,', self.browser.find_element(By.TAG_NAME, 'body').text)
-
+        self.assertIn(f'Your are logged in with {user.username}. Please,', self.browser.find_element(By.TAG_NAME, 'body').text)
         # end test
         self.sleep(6)
         
