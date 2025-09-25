@@ -66,6 +66,15 @@
 
     }
 
+    img {
+        max-width: 100%;
+    }
+
+    a{
+        color:var(--color-primary);
+        text-decoration: none;
+    }
+
     .container{
         max-width: 144rem;
         margin: 0 auto;
@@ -353,7 +362,9 @@
             color: var(--color-error-dark);
         }
 
-        .form-content input{
+        .form-content input,
+        .form-content textarea,
+        .form-content select {
             width: 100%;
             padding: 1rem;
             border-radius: .4rem;
@@ -385,6 +396,10 @@
 
         .inline-form{
             display: inline;
+        }
+
+        .span-2{
+            grid-column: span 2;
         }
 
         /* Messages */
@@ -464,6 +479,10 @@
 
         .center{
             text-align: center;
+        }
+
+        .left{
+            text-align: left;
         }
 
         .m-x {
