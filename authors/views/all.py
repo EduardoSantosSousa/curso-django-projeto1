@@ -89,29 +89,3 @@ def dashboard(request):
     )
     return render (request, 'authors/pages/dashboard.html', context={'recipes':recipes,})
 
-
-@login_required(login_url='authors:login', redirect_field_name='next')
-def dashboard_recipe_delete(request):
-    if request.method == "POST":
-        recipe_id = request.POST.get("id")
-
-        # Verifica se veio algum id
-        if not recipe_id:
-            messages.error(request, "Recipe ID is missing.")
-            return redirect("authors:dashboard")
-
-        # Tenta converter para inteiro, se falhar retorna erro
-        try:
-            recipe_id = int(recipe_id)
-        except ValueError:
-            messages.error(request, "Invalid Recipe ID.")
-            return redirect("authors:dashboard")
-
-        # Tenta pegar a receita; se não existir ou não pertencer ao usuário, retorna 404
-        recipe = get_object_or_404(Recipe, pk=recipe_id, author=request.user, is_published=False)
-
-        # Deleta a receita
-        recipe.delete()
-        messages.success(request, "Recipe deleted successfully.")
-
-    return redirect("authors:dashboard")
