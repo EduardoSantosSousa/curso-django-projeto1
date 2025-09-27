@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
-from PIL import Image  # <- IMPORTANTE!
+from PIL import Image
+from django.urls import reverse
 
 class Category(models.Model):
     name = models.CharField(max_length=65)
@@ -46,5 +47,10 @@ class Recipe(models.Model):
                     img.save(self.cover.path)
             except Exception as e:
                 print(f"Erro ao redimensionar imagem: {e}")
+
+    def get_absolute_url(self):
+        
+        return reverse('recipes:recipe', args=(self.id, ))
+
 
     
