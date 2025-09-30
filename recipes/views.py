@@ -7,7 +7,7 @@ import unicodedata
 from utils.pagination import make_pagination
 import os
 from django.contrib import messages
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
 
 PER_PAGE = int(os.environ.get('PER_PAGE', 6))
 
@@ -170,3 +170,6 @@ def search(request):
         'addition_url_query':f'&q={search_term}'
     })
 
+class RecipeDetail(DetailView):
+    ...
+    
