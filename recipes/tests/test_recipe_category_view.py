@@ -22,7 +22,7 @@ class RecipeCategoryViewTest(RecipeTestBase):
 
         recipe = self.make_recipe(is_published=False)
 
-        response = self.client.get(reverse('recipes:recipe', kwargs={'id':recipe.category.id}))
+        response = self.client.get(reverse('recipes:recipe', kwargs={'pk':recipe.category.id}))
 
         #Check if one recipe exists:
         self.assertEqual(response.status_code, 404)     
