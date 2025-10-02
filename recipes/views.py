@@ -172,8 +172,8 @@ def search(request):
 
 class RecipeDetail(DetailView):
     model = Recipe
-    context_object_name = 'recipe;'
-    template_name = 'recipe/pages/recipe-view.html'
+    context_object_name = 'recipe'
+    template_name = 'recipes/pages/recipe-view.html'
 
     def get_queryset(self, *args, **kwargs):
         qs = super().get_queryset(*args, **kwargs)
