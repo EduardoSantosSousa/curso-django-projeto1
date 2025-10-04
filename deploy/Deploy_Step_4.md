@@ -1,0 +1,1 @@
+## 🧠 Resumo — Configuração Inicial do Servidor (Google Cloud / Ubuntu)

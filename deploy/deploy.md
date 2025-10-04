@@ -40,10 +40,11 @@ ssh-keygen -t ed25519 -f ~/.ssh/id_ed25519
 2. Copie a chave pública (`.pub`) e cole em Metadados → Chaves SSH no GCP.
 3. Salve e aguarde o acesso autorizado.
 4. Conexão SSH:
+   
 ```bash
 ssh -i ~/.ssh/id_ed25519 usuario@IP_DO_SERVIDOR
 ```
-5. Dica: Para facilitar futuras conexões, configure um alias no `~/.ssh/config`:
+1. Dica: Para facilitar futuras conexões, configure um alias no `~/.ssh/config`:
 ```text
 Host curso-django
     HostName IP_DO_SERVIDOR
