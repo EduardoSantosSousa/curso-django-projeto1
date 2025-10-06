@@ -31,11 +31,13 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'recipes',
     'authors',
+    'debug_toolbar',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -146,3 +148,6 @@ MESSAGE_TAGS = {
     constants.SUCCESS:'message-success',
     constants.WARNING:'message-warning'
 }
+
+# Django Debug Toolbar:
+INTERNAL_IPS = ["127.0.0.1",]

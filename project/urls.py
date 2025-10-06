@@ -8,7 +8,8 @@ app_name = 'recipes'
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('recipes.urls')),
-    path('authors/', include('authors.urls')) # / primeiro elemento seria a pagina home da nossa aplicação.
+    path('authors/', include('authors.urls')), # / primeiro elemento seria a pagina home da nossa aplicação.
+    path('__debug__/', include('debug_toolbar.urls')),
 
 ]
 
