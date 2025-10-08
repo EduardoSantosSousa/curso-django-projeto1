@@ -10,8 +10,20 @@ from django.contrib import messages
 from django.views.generic import ListView, DetailView
 from django.http import JsonResponse
 from django.forms.models import model_to_dict
+from django.shortcuts import render
 
 PER_PAGE = int(os.environ.get('PER_PAGE', 6))
+
+
+def theory(request, *args, **kwargs):
+    recipes = Recipe.objects.all()
+    print(recipes[0].title)
+    context = {
+        'recipes': recipes
+
+    }
+    return render(request, 'recipes/pages/theory.html', context=context)
+
 
 class RecipeListViewBase(ListView):
     model = Recipe
