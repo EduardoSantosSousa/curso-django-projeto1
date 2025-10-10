@@ -3,6 +3,7 @@ from utils.recipes.factory import make_recipe
 from recipes.models import Recipe
 from django.http import Http404
 from django.db.models import Q
+from django.db.models import F
 import unicodedata
 from utils.pagination import make_pagination
 import os
@@ -16,8 +17,10 @@ PER_PAGE = int(os.environ.get('PER_PAGE', 6))
 
 
 def theory(request, *args, **kwargs):
-    recipes = Recipe.objects.all()
-    print(recipes[0].title)
+    recipes = Recipe.objects.filter(
+        id = F('author__id')
+    )[:10]
+
     context = {
         'recipes': recipes
 
