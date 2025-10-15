@@ -6,10 +6,11 @@ from authors.models import Profile
 User = get_user_model()
 
 @receiver(post_save, sender=User)
-def create_profile(sender, instace, created, *args, **kwargs):
+def create_profile(sender, instance, created, *args, **kwargs):
     if created:
-        profile = Profile.objects.create(author=instace)
+        profile = Profile.objects.create(author=instance)
         profile.save()
+
 
         
 
