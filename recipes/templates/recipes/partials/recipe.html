@@ -16,8 +16,13 @@
             </div>
 
             <div class="recipe-author">
-                    <span class="recipe-author-item">
-                {%if recipe.author is not None%}        
+                {%if recipe.author is not None%}
+                <span class="recipe-author-item"></span>
+                    
+                    {% if recipe.author.profile %}
+                        <a href="{% url 'authors:profile' recipe.author.profile.id %}">
+                    {% endif %}
+
                     {%if recipe.author.first_name%}        
                         <i class="fas fa-user"></i>
                             {{recipe.author.first_name}} {{recipe.author.last_name}}</span>
@@ -35,6 +40,10 @@
                         <a href="{% url 'recipes:category' recipe.category.id %}"><i class="fas fa-layer-group"></i>
                             <span>{{recipe.category.name}}</span></a></span>
                 {%endif%}
+
+                {% if recipe.author.profile %}
+                    </a>
+                {% endif %}
 
             </div>
             <div class="recipe-content">
